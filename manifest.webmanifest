@@ -1,0 +1,19 @@
+{
+  "name": "MHN Hunter Assistant",
+  "short_name": "MHN助手",
+  "description": "Monster Hunter Now 個人狩獵助手",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0f13",
+  "theme_color": "#0f1318",
+  "lang": "zh-Hant",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
