@@ -19,7 +19,7 @@
         <p class="eyebrow">MONSTER HUNTER NOW</p>
         <h1>MHN Hunter Assistant</h1>
       </div>
-      <div class="version">V0.1</div>
+      <div class="version">V0.2</div>
     </header>
 
     <main>
@@ -45,10 +45,10 @@
             <span>配裝推薦</span>
             <small>V0.3</small>
           </button>
-          <button class="quick-card locked" data-toast="素材計算器會在 V0.2 開放">
+          <button class="quick-card" data-target="materialsView">
             <span class="quick-icon">📦</span>
             <span>素材計算</span>
-            <small>V0.2</small>
+            <small><b id="materialPlanCount">0</b> 個計畫</small>
           </button>
           <button class="quick-card locked" data-toast="魔物資料會在 V0.4 開放">
             <span class="quick-icon">🐲</span>
@@ -104,12 +104,29 @@
       </section>
 
       <section id="materialsView" class="view">
-        <div class="coming-card">
-          <div class="coming-icon">📦</div>
-          <p class="eyebrow">NEXT UPDATE</p>
-          <h2>素材計算器</h2>
-          <p>V0.2 會加入「目前等級 → 目標等級」、需要／已有／尚缺與完成率。</p>
+        <div class="section-title-row sticky-title">
+          <div>
+            <p class="eyebrow">MATERIALS</p>
+            <h2>素材計算器</h2>
+          </div>
+          <button class="primary-btn" id="addMaterialPlanBtn">＋ 新計畫</button>
         </div>
+
+        <div class="material-summary-grid">
+          <article class="mini-stat">
+            <span>進行中</span>
+            <strong id="materialSummaryPlans">0</strong>
+            <small>個養成計畫</small>
+          </article>
+          <article class="mini-stat">
+            <span>總缺口</span>
+            <strong id="materialSummaryMissing">0</strong>
+            <small>件素材</small>
+          </article>
+        </div>
+
+        <p class="material-tip">V0.2 先以你輸入的需求數量計算；下一階段會接入 MHN 裝備素材資料，讓需求數量自動帶入。</p>
+        <div id="materialPlanList" class="material-plan-list"></div>
       </section>
 
       <section id="settingsView" class="view">
@@ -187,6 +204,56 @@
         <textarea id="equipmentNote" rows="3" placeholder="漂移技能、用途、想升到的等級…" maxlength="160"></textarea>
       </label>
       <button class="save-btn" value="default">儲存裝備</button>
+    </form>
+  </dialog>
+
+  <dialog id="materialPlanDialog" class="sheet-dialog">
+    <form id="materialPlanForm" method="dialog">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">MATERIAL PLAN</p>
+          <h2>新增素材計畫</h2>
+        </div>
+        <button type="button" class="icon-btn" data-close="materialPlanDialog">✕</button>
+      </div>
+
+      <label>關聯裝備
+        <select id="materialEquipmentId">
+          <option value="">不指定裝備</option>
+        </select>
+      </label>
+      <label>計畫名稱
+        <input id="materialPlanName" placeholder="例：雷狼太刀升 10-5" required maxlength="50" />
+      </label>
+
+      <div class="level-range">
+        <div>
+          <span>目前</span>
+          <div class="form-grid compact">
+            <label>Grade<select id="materialCurrentGrade"></select></label>
+            <label>Level<select id="materialCurrentLevel"></select></label>
+          </div>
+        </div>
+        <div class="range-arrow">→</div>
+        <div>
+          <span>目標</span>
+          <div class="form-grid compact">
+            <label>Grade<select id="materialTargetGrade"></select></label>
+            <label>Level<select id="materialTargetLevel"></select></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="material-editor-head">
+        <div>
+          <p class="label">素材項目</p>
+          <small>輸入總需求與目前持有數量</small>
+        </div>
+        <button type="button" class="text-btn" id="addMaterialRowBtn">＋ 加素材</button>
+      </div>
+      <div id="materialRows" class="material-editor"></div>
+
+      <button class="save-btn" value="default">建立素材計畫</button>
     </form>
   </dialog>
 
