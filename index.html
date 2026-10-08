@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f1318" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MHN助手" />
+  <title>MHN Hunter Assistant</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">MONSTER HUNTER NOW</p>
+        <h1>MHN Hunter Assistant</h1>
+      </div>
+      <div class="version">V0.1</div>
+    </header>
+
+    <main>
+      <section id="homeView" class="view active">
+        <article class="hunter-card">
+          <div class="hunter-avatar">⚔️</div>
+          <div class="hunter-info">
+            <p class="label">我的獵人</p>
+            <h2 id="hunterNameDisplay">Hunter</h2>
+            <p id="hunterMeta">HR -- ・ 主武器未設定</p>
+          </div>
+          <button class="icon-btn" id="editHunterBtn" aria-label="編輯獵人">✎</button>
+        </article>
+
+        <div class="quick-grid">
+          <button class="quick-card" data-target="equipmentView">
+            <span class="quick-icon">⚔️</span>
+            <span>我的裝備</span>
+            <small><b id="equipmentCount">0</b> 件已登錄</small>
+          </button>
+          <button class="quick-card locked" data-toast="配裝推薦會在 V0.3 開放">
+            <span class="quick-icon">🎯</span>
+            <span>配裝推薦</span>
+            <small>V0.3</small>
+          </button>
+          <button class="quick-card locked" data-toast="素材計算器會在 V0.2 開放">
+            <span class="quick-icon">📦</span>
+            <span>素材計算</span>
+            <small>V0.2</small>
+          </button>
+          <button class="quick-card locked" data-toast="魔物資料會在 V0.4 開放">
+            <span class="quick-icon">🐲</span>
+            <span>魔物資料</span>
+            <small>V0.4</small>
+          </button>
+        </div>
+
+        <article class="goal-card">
+          <div class="section-title-row">
+            <div>
+              <p class="label">今日養成目標</p>
+              <h3 id="goalTitle">先建立第一件裝備</h3>
+            </div>
+            <span id="goalPercent">0%</span>
+          </div>
+          <div class="progress"><span id="goalBar"></span></div>
+          <p class="muted" id="goalHint">新增裝備後，這裡會顯示你的養成進度。</p>
+        </article>
+
+        <section class="recent-section">
+          <div class="section-title-row">
+            <div>
+              <p class="label">最近裝備</p>
+              <h3>快速查看</h3>
+            </div>
+            <button class="text-btn" data-target="equipmentView">查看全部</button>
+          </div>
+          <div id="recentEquipment" class="empty-state">尚未建立裝備資料。</div>
+        </section>
+      </section>
+
+      <section id="equipmentView" class="view">
+        <div class="section-title-row sticky-title">
+          <div>
+            <p class="eyebrow">EQUIPMENT</p>
+            <h2>我的裝備</h2>
+          </div>
+          <button class="primary-btn" id="addEquipmentBtn">＋ 新增</button>
+        </div>
+
+        <div class="filter-row" id="filterRow">
+          <button class="chip active" data-filter="all">全部</button>
+          <button class="chip" data-filter="weapon">武器</button>
+          <button class="chip" data-filter="head">頭</button>
+          <button class="chip" data-filter="chest">身</button>
+          <button class="chip" data-filter="arms">手</button>
+          <button class="chip" data-filter="waist">腰</button>
+          <button class="chip" data-filter="legs">腳</button>
+        </div>
+
+        <div id="equipmentList" class="equipment-list"></div>
+      </section>
+
+      <section id="materialsView" class="view">
+        <div class="coming-card">
+          <div class="coming-icon">📦</div>
+          <p class="eyebrow">NEXT UPDATE</p>
+          <h2>素材計算器</h2>
+          <p>V0.2 會加入「目前等級 → 目標等級」、需要／已有／尚缺與完成率。</p>
+        </div>
+      </section>
+
+      <section id="settingsView" class="view">
+        <div class="section-title-row">
+          <div>
+            <p class="eyebrow">SETTINGS</p>
+            <h2>設定</h2>
+          </div>
+        </div>
+        <article class="settings-card">
+          <button id="editHunterSettingsBtn" class="settings-row">編輯獵人資料 <span>›</span></button>
+          <button id="exportBtn" class="settings-row">匯出備份 <span>›</span></button>
+          <button id="importBtn" class="settings-row">匯入備份 <span>›</span></button>
+          <button id="clearBtn" class="settings-row danger">清除本機資料 <span>›</span></button>
+          <input id="importFile" type="file" accept="application/json" hidden />
+        </article>
+        <p class="privacy-note">目前資料只保存在這台裝置的瀏覽器，不會上傳到伺服器。</p>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="主要導覽">
+      <button class="nav-btn active" data-target="homeView"><span>⌂</span><small>首頁</small></button>
+      <button class="nav-btn" data-target="equipmentView"><span>⚔</span><small>裝備</small></button>
+      <button class="nav-btn" data-target="materialsView"><span>▣</span><small>素材</small></button>
+      <button class="nav-btn" data-target="settingsView"><span>⚙</span><small>設定</small></button>
+    </nav>
+  </div>
+
+  <dialog id="equipmentDialog" class="sheet-dialog">
+    <form id="equipmentForm" method="dialog">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">ADD EQUIPMENT</p>
+          <h2>新增裝備</h2>
+        </div>
+        <button type="button" class="icon-btn" data-close="equipmentDialog">✕</button>
+      </div>
+
+      <label>部位
+        <select id="equipmentType" required>
+          <option value="weapon">武器</option>
+          <option value="head">頭部</option>
+          <option value="chest">身體</option>
+          <option value="arms">手部</option>
+          <option value="waist">腰部</option>
+          <option value="legs">腿部</option>
+        </select>
+      </label>
+      <label>名稱
+        <input id="equipmentName" placeholder="例：雷狼龍太刀" required maxlength="40" />
+      </label>
+      <div class="form-grid">
+        <label>Grade
+          <select id="equipmentGrade"></select>
+        </label>
+        <label>Level
+          <select id="equipmentLevel"></select>
+        </label>
+      </div>
+      <label>屬性
+        <select id="equipmentElement">
+          <option value="無">無／物理</option>
+          <option value="火">🔥 火</option>
+          <option value="水">💧 水</option>
+          <option value="雷">⚡ 雷</option>
+          <option value="冰">❄️ 冰</option>
+          <option value="龍">🐉 龍</option>
+          <option value="毒">☠️ 毒</option>
+          <option value="麻痺">⚡ 麻痺</option>
+          <option value="睡眠">🌙 睡眠</option>
+          <option value="爆破">💥 爆破</option>
+        </select>
+      </label>
+      <label>備註
+        <textarea id="equipmentNote" rows="3" placeholder="漂移技能、用途、想升到的等級…" maxlength="160"></textarea>
+      </label>
+      <button class="save-btn" value="default">儲存裝備</button>
+    </form>
+  </dialog>
+
+  <dialog id="hunterDialog" class="sheet-dialog">
+    <form id="hunterForm" method="dialog">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">HUNTER PROFILE</p>
+          <h2>獵人資料</h2>
+        </div>
+        <button type="button" class="icon-btn" data-close="hunterDialog">✕</button>
+      </div>
+      <label>獵人名稱
+        <input id="hunterName" maxlength="24" placeholder="Hunter" />
+      </label>
+      <label>HR
+        <input id="hunterHr" type="number" min="1" max="9999" placeholder="例：250" />
+      </label>
+      <label>主武器
+        <select id="hunterWeapon">
+          <option value="">未設定</option>
+          <option>大劍</option><option>太刀</option><option>單手劍</option><option>雙劍</option>
+          <option>大錘</option><option>狩獵笛</option><option>長槍</option><option>銃槍</option>
+          <option>斬擊斧</option><option>充能斧</option><option>操蟲棍</option><option>輕弩</option>
+          <option>重弩</option><option>弓</option>
+        </select>
+      </label>
+      <button class="save-btn" value="default">儲存獵人資料</button>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
